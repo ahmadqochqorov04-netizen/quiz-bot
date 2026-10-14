@@ -362,18 +362,16 @@ async def on_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # ------------------------------ ISHGA TUSHIRISH ------------------------------
 def load_token():
-    token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+    token = os.environ.get("TELEGRAM_TOKEN", "").strip()
+    if token:
+        return token
+    
     path = os.path.join(BASE, "token.txt")
-    if not token and os.path.exists(path):
-        with open(path, encoding="utf-8") as f:
-            token = f.read().strip()
-    if not token:
-        token = input("BotFather bergan tokenni shu yerga qo'ying va Enter bosing: ").strip()
-        if token:
-            with open(path, "w", encoding="utf-8") as f:
-                f.write(token)
-    return token
-
+    if os.path.exists(path):
+        with open(path, "r", encoding="utf-8") as f:
+            return f.read().strip()
+            
+    return None
 
 async def post_init(app):
     await app.bot.set_my_commands([
